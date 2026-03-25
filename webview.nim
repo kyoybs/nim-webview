@@ -387,6 +387,15 @@ type
     w: Webview
     fn: proc (id: string; req: JsonNode): string
 
+var
+  globalCallbackContexts {.threadvar.}: seq[CallBackContext]
+
+proc getOrCreateCallbackContext(w: Webview; fn: proc (id: string; req: JsonNode): string): CallBackContext =
+  if globalCallbackContexts.len == 0:
+    globalCallbackContexts = @[]
+  result = CallBackContext(w: w, fn: fn)
+  globalCallbackContexts.add(result)
+
 proc version*(): WebviewVersionInfo {.inline, deprecated: "Useless. use `webviewVersion()`_ instead".} = webviewVersion()[]
   ## Dereferenced version of `webviewVersion() <#webviewVersion>`_.
   ##
@@ -409,10 +418,8 @@ proc bindCallback*(w: Webview; name: string;
                  fn: proc (id: string; req: JsonNode): string): WebviewError {.discardable.} =
   ## Essentially a high-level version of
   ## `webviewBind <#webviewBind,Webview,cstring,proc(cstring,cstring,pointer),pointer>`_
-  
-  #      using global seems to work...
-  # TODO is there a better solution?
-  let arg {.global.} = CallBackContext(w: w, fn: fn)
+
+  let arg = getOrCreateCallbackContext(w, fn)
 
   result = w.webviewBind(name, closure, cast[pointer](arg))
 
