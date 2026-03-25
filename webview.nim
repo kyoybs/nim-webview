@@ -7,6 +7,7 @@ const
   libs = currentSourcePath().parentDir() / "libs"
   # webview = libs / "webview"
   webview2Include {.used.} = libs / "webview2"
+  webviewInclude {.used.} = libs / "webview" / "core" / "include"
   isDebug = not (defined(release) or defined(danger))
 
 when defined(useWebviewDll):
@@ -52,6 +53,7 @@ else:
 
   elif defined(windows):
     {.passC: "-I" & webview2Include.}
+    {.passC: "-I" & webviewInclude.}
     {.passL: "-mwindows".}
 
     when defined(gcc):
@@ -82,7 +84,7 @@ else:
       {.passL: staticExec"pkg-config --libs gtk+-3.0 webkit2gtk-4.0".}
       {.passC: staticExec"pkg-config --cflags gtk+-3.0 webkit2gtk-4.0".}
 
-  {.compile: libs / "webview" / "webview.cc".}
+  {.compile: libs / "webview" / "core" / "src" / "webview.cc".}
   {.pragma: webview, discardable.}
 
 const
