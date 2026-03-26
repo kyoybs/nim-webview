@@ -89,7 +89,7 @@ else:
 
 const
   WEBVIEW_VERSION_MAJOR*             = 0  ## The current library major version.
-  WEBVIEW_VERSION_MINOR*             = 11 ## The current library minor version.
+  WEBVIEW_VERSION_MINOR*             = 12 ## The current library minor version.
   WEBVIEW_VERSION_PATCH*             = 0  ## The current library patch version.
   WEBVIEW_VERSION_PRE_RELEASE*    = "" ## SemVer 2.0.0 pre-release labels prefixed with "-".
   WEBVIEW_VERSION_BUILD_METADATA* = "" ## SemVer 2.0.0 build metadata prefixed with "+".
